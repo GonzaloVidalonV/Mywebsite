@@ -13,19 +13,7 @@ title: Mass Shootings
 ---
   
 
-```{r}
-#| label: load-libraries
-#| echo: false # This option disables the printing of code (only output is displayed).
-#| message: false
-#| warning: false
 
-library(tidyverse)
-library(wbstats)
-library(skimr)
-library(countrycode)
-library(here)
-library(patchwork)
-```
 
 # Data Visualisation - Exploration
 
@@ -37,15 +25,24 @@ In July 2012, in the aftermath of a mass shooting in a movie theater in Aurora, 
 
 ## Obtain the data
 
-```{r}
-#| echo: false
-#| message: false
-#| warning: false
 
-
-mass_shootings <- read_csv(here::here("data", "mass_shootings.csv"))
-
-glimpse(mass_shootings)
+```
+## Rows: 125
+## Columns: 14
+## $ case                 <chr> "Oxford High School shooting", "San Jose VTA shoo…
+## $ year                 <dbl> 2021, 2021, 2021, 2021, 2021, 2021, 2020, 2020, 2…
+## $ month                <chr> "Nov", "May", "Apr", "Mar", "Mar", "Mar", "Mar", …
+## $ day                  <dbl> 30, 26, 15, 31, 22, 16, 16, 26, 10, 6, 31, 4, 3, …
+## $ location             <chr> "Oxford, Michigan", "San Jose, California", "Indi…
+## $ summary              <chr> "Ethan Crumbley, a 15-year-old student at Oxford …
+## $ fatalities           <dbl> 4, 9, 8, 4, 10, 8, 4, 5, 4, 3, 7, 9, 22, 3, 12, 5…
+## $ injured              <dbl> 7, 0, 7, 1, 0, 1, 0, 0, 3, 8, 25, 27, 26, 12, 4, …
+## $ total_victims        <dbl> 11, 9, 15, 5, 10, 9, 4, 5, 7, 11, 32, 36, 48, 15,…
+## $ location_type        <chr> "School", "Workplace", "Workplace", "Workplace", …
+## $ male                 <lgl> TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, T…
+## $ age_of_shooter       <dbl> 15, 57, 19, NA, 21, 21, 31, 51, NA, NA, 36, 24, 2…
+## $ race                 <chr> NA, NA, "White", NA, NA, "White", NA, "Black", "B…
+## $ prior_mental_illness <chr> NA, "Yes", "Yes", NA, "Yes", NA, NA, NA, NA, NA, …
 ```
 
 | column(variable)     | description                                                                 |
@@ -69,15 +66,34 @@ glimpse(mass_shootings)
 
 -   Generate a data frame that summarizes the number of mass shootings per year.
 
-```{r}
+
+```r
 mass_shootings %>% 
   group_by(year) %>% 
   summarise(count=n())
 ```
 
+```
+## # A tibble: 37 × 2
+##     year count
+##    <dbl> <int>
+##  1  1982     1
+##  2  1984     2
+##  3  1986     1
+##  4  1987     1
+##  5  1988     1
+##  6  1989     2
+##  7  1990     1
+##  8  1991     3
+##  9  1992     2
+## 10  1993     4
+## # ℹ 27 more rows
+```
+
 -   Generate a bar chart that identifies the number of mass shooters associated with each race category. The bars should be sorted from highest to lowest and each bar should show its number.
 
-```{r}
+
+```r
 mass_shootings %>% 
   group_by(race) %>% 
   summarise(count=n()) %>% 
@@ -92,24 +108,28 @@ mass_shootings %>%
   theme_minimal() +
   labs(x = "Race", y = "Number of Shooters") +
   ggtitle("Number of Mass Shooters by Race") 
-
 ```
+
+<img src="/blogs/Mass_shootings_files/figure-html/unnamed-chunk-4-1.png" width="672" />
 
 -   Generate a boxplot visualizing the number of total victims, by type of location.
 
-```{r}
+
+```r
 mass_shootings %>% 
   ggplot(aes(x=location_type, y=total_victims))+
   geom_boxplot() +
   labs(x = "Location", y = "Number of Victims") +
   ggtitle("Number of Victims by Location") +
   theme_minimal()
-
 ```
+
+<img src="/blogs/Mass_shootings_files/figure-html/unnamed-chunk-5-1.png" width="672" />
 
 -   Redraw the same plot, but remove the Las Vegas Strip massacre from the dataset.
 
-```{r}
+
+```r
 mass_shootings %>%
   filter(case != "Las Vegas Strip massacre") %>% 
   ggplot(aes(x=location_type, y=total_victims))+
@@ -119,21 +139,32 @@ mass_shootings %>%
   theme_minimal()
 ```
 
+<img src="/blogs/Mass_shootings_files/figure-html/unnamed-chunk-6-1.png" width="672" />
+
 ### More open-ended questions
 
 Address the following questions. Generate appropriate figures/tables to support your conclusions.
 
 -   How many white males with prior signs of mental illness initiated a mass shooting after 2000?
 
-```{r}
+
+```r
 mass_shootings %>% 
   filter(race=="White",prior_mental_illness=="Yes", year>2000) %>% 
   summarise(count=n())
 ```
 
+```
+## # A tibble: 1 × 1
+##   count
+##   <int>
+## 1    23
+```
+
 -   Which month of the year has the most mass shootings? Generate a bar chart sorted in chronological (natural) order (Jan-Feb-Mar- etc) to provide evidence of your answer.
 
-```{r}
+
+```r
 mass_shootings %>% 
   group_by(month) %>% 
   summarise(count=n()) %>% 
@@ -159,9 +190,12 @@ mass_shootings %>%
   geom_text(aes(label=count), color='white', vjust=1.5)
 ```
 
+<img src="/blogs/Mass_shootings_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+
 -   How does the distribution of mass shooting fatalities differ between White and Black shooters? What about White and Latino shooters?
 
-```{r}
+
+```r
 mass_shootings %>% 
   filter(race=="White" | race=="Black") %>%
   ggplot(aes(x=fatalities)) +
@@ -170,15 +204,20 @@ mass_shootings %>%
   labs(x = "Shooter Race", y = "Number of Fatalities") +
   ggtitle("Distribution of Fatalities: Black vs. White Shooters") +
   theme_minimal()
-  
-  
 ```
+
+```
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+```
+
+<img src="/blogs/Mass_shootings_files/figure-html/unnamed-chunk-9-1.png" width="672" />
 
 ### Very open-ended
 
 -   Are mass shootings with shooters suffering from mental illness different from mass shootings with no signs of mental illness in the shooter?
 
-```{r}
+
+```r
 mass_shootings %>% 
   filter(!is.na(prior_mental_illness)) %>% 
   ggplot()+
@@ -188,7 +227,11 @@ mass_shootings %>%
   labs(x = "Age of Shooter", y = "Total Victims") +
   ggtitle("Total Victims across age and location") + 
   guides(color=guide_legend(title="Mental Illness?"))
+```
 
+<img src="/blogs/Mass_shootings_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+
+```r
 mass_shootings %>% 
   filter(!is.na(prior_mental_illness)) %>% 
   ggplot()+
@@ -200,9 +243,12 @@ mass_shootings %>%
   guides(color=guide_legend(title="Mental Illness?"))
 ```
 
+<img src="/blogs/Mass_shootings_files/figure-html/unnamed-chunk-10-2.png" width="672" />
+
 -   Assess the relationship between mental illness and total victims, mental illness and location type, and the intersection of all three variables.
 
-```{r}
+
+```r
 mass_shootings %>% 
   filter(!is.na(prior_mental_illness)) %>% 
   ggplot(aes(x=prior_mental_illness,y=total_victims)) +
@@ -210,7 +256,11 @@ mass_shootings %>%
   theme_minimal() +
   labs(x = "Prior Mental Illness?", y = "Total Victims") +
   ggtitle("Total Victims distribution according to prior Mental Illness") 
+```
 
+<img src="/blogs/Mass_shootings_files/figure-html/unnamed-chunk-11-1.png" width="672" />
+
+```r
 mass_shootings %>% 
   filter(!is.na(prior_mental_illness)) %>% 
   group_by(prior_mental_illness, location_type) %>% 
@@ -223,5 +273,11 @@ mass_shootings %>%
   guides(fill=guide_legend(title="Mental Illness?"))
 ```
 
-Make sure to provide a couple of sentences of written interpretation of your tables/figures. Graphs and tables alone will not be sufficient to answer this question.
+```
+## `summarise()` has grouped output by 'prior_mental_illness'. You can override
+## using the `.groups` argument.
+```
 
+<img src="/blogs/Mass_shootings_files/figure-html/unnamed-chunk-11-2.png" width="672" />
+
+Make sure to provide a couple of sentences of written interpretation of your tables/figures. Graphs and tables alone will not be sufficient to answer this question.

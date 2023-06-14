@@ -121,6 +121,9 @@ ranking %>%
          color=guide_legend(title="Main Campus Location"))
 
 ```
+<img src="/blogs/Ranking_files/figure-html/unnamed-chunk-6-1.png" width="648" style="display: block; margin: auto;" />
+
+
 
 ```r
 ranking %>% 
@@ -157,30 +160,7 @@ ranking %>%
   
 ```
 
-```r
-ranking %>% 
-  mutate(number=as.integer(number),
-         salary_today_us = as.integer(str_replace(salary_today_us, ",", "")),
-         international_students_percent=as.integer(international_students_percent),
-         internships_percent = as.integer(internships_percent),
-         location_main_campus = as.factor(location_main_campus),
-         salary_percentage_increase=as.integer(salary_percentage_increase),
-         rank_in_2020=as.integer(rank_in_2020),
-         rank_in_2021=as.integer(rank_in_2021)) %>% 
-  select(number, rank_in_2021, rank_in_2020, short_name) %>%
-  filter(number<=10) %>% 
-  rename(rank_in_2022 = number) %>% 
-  pivot_longer(cols=1:3) %>% 
-  mutate(name = as.integer(case_when(
-    name=="rank_in_2022" ~ 2022,
-    name=="rank_in_2021" ~ 2021,
-    name=="rank_in_2020" ~ 2020,
-  ))) %>% 
-  rename(year=name) %>% 
-  mutate(value=as.factor(value)) %>% 
-  
-  ggplot(aes(x=year, y=value, color=short_name)) +
-    geom_line() +
-    theme_minimal()
-```
+<img src="/blogs/Ranking_files/figure-html/unnamed-chunk-8-1.png" width="648" style="display: block; margin: auto;" />
+
+
 

@@ -23,7 +23,7 @@ params:
         title: Email
     enable: yes
     phone:
-      - phone: 7377905793
+      - phone: 07377905793
         title: Phone
   custom_css: []
   custom_js: []

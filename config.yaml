@@ -69,10 +69,10 @@ params:
         url: blogs
       - name: Blogs
         url: blogs
-      - name: Generic Blog
-        url: blogs/ipsum
-      - name: Elements
-        url: elements.html
+      #- name: Generic Blog
+       # url: blogs/ipsum
+    #  - name: Elements
+     #   url: elements.html
     menu: Menu
     subtitle:
     title: Home
@@ -87,7 +87,7 @@ params:
         subtitle: My CV
         title: About
         url: blogs/tempus
-      - image: pic03.jpg
+      - image: FT.jpg
         subtitle: Research
         title: Financial Times Ranking
         url: blogs/ranking
@@ -95,14 +95,14 @@ params:
         subtitle: 
         title: Mass Shootings Dataset
         url: blogs/mass
-      - image: pic05.jpg
-        subtitle: Ipsum Dolor Sit Amet
-        title: Contact
-        url: blogs/ipsum
-      - image: pic06.jpg
-        subtitle: The last one...
-        title: Final Assignment
-        url: blogs/ipsum
+      #- image: pic05.jpg
+       # subtitle: Ipsum Dolor Sit Amet
+        #title: Contact
+        #url: blogs/ipsum
+      #- image: pic06.jpg
+       # subtitle: The last one...
+        #title: Final Assignment
+        #url: blogs/ipsum
   two:
     buttonText: Get Started
     enable: yes
